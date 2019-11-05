@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.bluetoothkey">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +25,7 @@
         </activity>
         <service
             android:name=".MessengerService"
+            android:process=":messenger_service"
             android:enabled="true"
             android:exported="true">
         </service>

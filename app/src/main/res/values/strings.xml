@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">bluetoothKey</string>
+    <string name="messenger_notification_title">Messenger service</string>
+    <string name="messenger_notification_message">Messenger service is currently working</string>
 </resources>
