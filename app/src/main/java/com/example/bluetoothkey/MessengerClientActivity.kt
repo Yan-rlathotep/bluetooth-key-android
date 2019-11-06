@@ -41,17 +41,13 @@ class MessengerClientActivity: AppCompatActivity() {
 
 
     private fun startService() {
-        if (!serviceStarted) {
            startService(serviceIntent)
             serviceStarted = true
-        }
     }
 
     private fun stopService() {
-        if (serviceStarted) {
             stopService(serviceIntent)
             serviceStarted = false
-        }
     }
 
     private fun bindToService() {
