@@ -5,12 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_messengerclient.*
 
 
 class MessengerClientActivity: AppCompatActivity() {
+    fun show(view: View) {
+        view.visibility = View.VISIBLE
+    }
+
+    fun hide(view: View) {
+        view.visibility = View.INVISIBLE
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +67,8 @@ class MessengerClientActivity: AppCompatActivity() {
     private fun bindToService() {
         if (!boundToService) {
             bindService(serviceIntent, messengerServiceConnection, BIND_AUTO_CREATE)
+            boundToService = true
+            show(view_serviceIsBound)
         }
     }
 
@@ -66,6 +76,7 @@ class MessengerClientActivity: AppCompatActivity() {
         if (boundToService) {
             unbindService(messengerServiceConnection)
             boundToService = false
+            hide(view_serviceIsBound)
             serviceCallsMessenger = null
         }
     }
