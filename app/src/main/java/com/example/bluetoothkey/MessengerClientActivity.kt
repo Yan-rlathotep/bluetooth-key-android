@@ -18,6 +18,8 @@ class MessengerClientActivity: AppCompatActivity() {
         btn_bindToService.setOnClickListener {bindToService()}
         btn_unbindFromService.setOnClickListener {unbindFromService()}
         btn_sendOneWayMessage.setOnClickListener {sendOneWayMessage("Hello !")}
+        btn_runInForeground.setOnClickListener {enableForeground()}
+        btn_stopRunningInForeground.setOnClickListener {disableForeground()}
     }
 
     companion object {
@@ -77,8 +79,8 @@ class MessengerClientActivity: AppCompatActivity() {
         }
     }
 
-    private fun buildRequestMessage(messageText: String) : Message {
-        val message = Message.obtain(null, 1, 0, 0)
+    private fun buildRequestMessage(messageText: String, what: Int) : Message {
+        val message = Message.obtain(null, what, 0, 0)
         message.data = wrapRequestMessagePayload(messageText)
         return message
     }
@@ -91,7 +93,21 @@ class MessengerClientActivity: AppCompatActivity() {
 
     private fun sendOneWayMessage(messageText: String) {
         if (boundToService) {
-            val oneWayMessage = buildRequestMessage(messageText)
+            val oneWayMessage = buildRequestMessage(messageText, 1)
+            serviceCallsMessenger?.send(oneWayMessage)
+        }
+    }
+
+    private fun enableForeground() {
+        if (boundToService) {
+            val oneWayMessage = buildRequestMessage("", 2)
+            serviceCallsMessenger?.send(oneWayMessage)
+        }
+    }
+
+    private fun disableForeground() {
+        if (boundToService) {
+            val oneWayMessage = buildRequestMessage("", 3)
             serviceCallsMessenger?.send(oneWayMessage)
         }
     }

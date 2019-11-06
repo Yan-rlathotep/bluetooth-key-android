@@ -25,7 +25,7 @@ class MessengerService : Service() {
         }
     }
 
-    private fun displayNotification() {
+    private fun startForeground() {
         createNotificationChannel()
 
         val pendingIntent: PendingIntent =
@@ -43,13 +43,11 @@ class MessengerService : Service() {
         startForeground(1, notification)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        displayNotification()
-
-        return super.onStartCommand(intent, flags, startId)
+    private fun stopForeground() {
+        stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
-    class IncomingHandler(private val applicationContext: Context) : Handler() {
+    inner class IncomingHandler(private val applicationContext: Context) : Handler() {
         private val payloadKeyMessage = "message"
 
         private fun parseRequestMessagePayload(payload: Bundle?): String? {
@@ -67,6 +65,10 @@ class MessengerService : Service() {
                     val incomingMessage = parseRequestMessagePayload(msg.data)
                     Sandwich.serve(applicationContext, "Client said something", incomingMessage)
                 }
+
+                2 -> {startForeground()}
+
+                3 -> {stopForeground()}
 
                 else -> {
                     Sandwich.serve(applicationContext, "Error", "Client sent message with unknown WHAT ${msg?.what}")
