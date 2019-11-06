@@ -17,6 +17,7 @@ class MessengerClientActivity: AppCompatActivity() {
         btn_stopService.setOnClickListener {stopService()}
         btn_bindToService.setOnClickListener {bindToService()}
         btn_unbindFromService.setOnClickListener {unbindFromService()}
+        btn_sendOneWayMessage.setOnClickListener {sendOneWayMessage("Hello !")}
     }
 
     companion object {
@@ -73,6 +74,25 @@ class MessengerClientActivity: AppCompatActivity() {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             boundToService = true
             serviceCallsMessenger = Messenger(service)
+        }
+    }
+
+    private fun buildRequestMessage(messageText: String) : Message {
+        val message = Message.obtain(null, 1, 0, 0)
+        message.data = wrapRequestMessagePayload(messageText)
+        return message
+    }
+
+    private fun wrapRequestMessagePayload(messageText: String): Bundle {
+        val payload = Bundle()
+        payload.putString("message", messageText)
+        return payload
+    }
+
+    private fun sendOneWayMessage(messageText: String) {
+        if (boundToService) {
+            val oneWayMessage = buildRequestMessage(messageText)
+            serviceCallsMessenger?.send(oneWayMessage)
         }
     }
 

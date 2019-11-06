@@ -5,13 +5,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.IBinder
-import android.os.Message
-import android.os.Messenger
 import android.app.NotificationManager
 import android.app.NotificationChannel
-import android.os.Build
+import android.os.*
 
 class MessengerService : Service() {
     private val channelId = "MessengerServiceChannel"
@@ -54,12 +50,21 @@ class MessengerService : Service() {
     }
 
     class IncomingHandler(private val applicationContext: Context) : Handler() {
+        private val payloadKeyMessage = "message"
+
+        private fun parseRequestMessagePayload(payload: Bundle?): String? {
+            if (payload != null && payload.containsKey(payloadKeyMessage)) {
+                return payload.getString(payloadKeyMessage)
+            } else {
+                throw RuntimeException("Payload of message request is missing")
+            }
+        }
 
         override fun handleMessage(msg: Message?) {
             when(msg?.what) {
 
                 1 -> {
-                    val incomingMessage = "Hey !"
+                    val incomingMessage = parseRequestMessagePayload(msg.data)
                     Sandwich.serve(applicationContext, "Client said something", incomingMessage)
                 }
 
