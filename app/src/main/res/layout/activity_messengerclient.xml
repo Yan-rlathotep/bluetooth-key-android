@@ -31,12 +31,6 @@
         android:text="Stop service" />
 
     <Button
-        android:id="@+id/btn_sendOneWayMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send one way message" />
-
-    <Button
         android:id="@+id/btn_runInForeground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,4 +41,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Stop running in foreground" />
+
+    <Button
+        android:id="@+id/btn_sendOneWayMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send one way message" />
+
+    <Button
+        android:id="@+id/btn_sendMessageWithReplyTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send message expecting an answer" />
 </LinearLayout>

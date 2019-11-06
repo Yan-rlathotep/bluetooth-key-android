@@ -58,17 +58,37 @@ class MessengerService : Service() {
             }
         }
 
+        fun buildResponseMessage(reply: String) : Message {
+            val message = Message.obtain(null, 5, 0, 0)
+            message.data = wrapResponseMessagePayload(reply)
+            return message
+        }
+
+        private fun wrapResponseMessagePayload(reply: String): Bundle {
+            val payload = Bundle()
+            payload.putString("reply", reply)
+            return payload
+        }
+
         override fun handleMessage(msg: Message?) {
             when(msg?.what) {
 
-                1 -> {
+                1 -> {startForeground()}
+
+                2 -> {stopForeground()}
+
+                3 -> {
                     val incomingMessage = parseRequestMessagePayload(msg.data)
                     Sandwich.serve(applicationContext, "Client said something", incomingMessage)
                 }
 
-                2 -> {startForeground()}
+                4 -> {
+                    val incomingMessage = parseRequestMessagePayload(msg.data)
+                    Sandwich.serve(applicationContext, "Client said something", incomingMessage)
 
-                3 -> {stopForeground()}
+                    val reply = buildResponseMessage("I'm fine, thank you !")
+                    msg.replyTo.send(reply)
+                }
 
                 else -> {
                     Sandwich.serve(applicationContext, "Error", "Client sent message with unknown WHAT ${msg?.what}")
